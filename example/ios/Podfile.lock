@@ -1,17 +1,40 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_umeng_ushare (0.0.1):
+  - flutter_umeng_ushare (1.0.1):
     - Flutter
     - UMCCommonLog
     - UMCommon
     - UMDevice
+    - UMLink
+    - UMShare/Social/DingDing
+    - UMShare/Social/QQ
+    - UMShare/Social/WeChat
     - UMShare/UI
   - UMCCommonLog (2.0.2)
   - UMCommon (7.3.5):
     - UMDevice
   - UMDevice (2.0.5)
+  - UMLink (1.2.0):
+    - UMCommon
   - UMShare/Core (6.10.4):
     - UMCommon
+  - UMShare/Social/DingDing (6.10.4):
+    - UMCommon
+    - UMShare/Core
+  - UMShare/Social/QQ (6.10.4):
+    - UMCommon
+    - UMShare/Core
+    - UMShare/Social/ReducedQQ
+  - UMShare/Social/ReducedQQ (6.10.4):
+    - UMCommon
+    - UMShare/Core
+  - UMShare/Social/ReducedWeChat (6.10.4):
+    - UMCommon
+    - UMShare/Core
+  - UMShare/Social/WeChat (6.10.4):
+    - UMCommon
+    - UMShare/Core
+    - UMShare/Social/ReducedWeChat
   - UMShare/UI (6.10.4):
     - UMCommon
     - UMShare/Core
@@ -25,6 +48,7 @@ SPEC REPOS:
     - UMCCommonLog
     - UMCommon
     - UMDevice
+    - UMLink
     - UMShare
 
 EXTERNAL SOURCES:
@@ -35,10 +59,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  flutter_umeng_ushare: 3f92afd01d678b3b44d4bbc9c00dfd56b6cd5203
+  flutter_umeng_ushare: 8423a2559519eadcd35784c3cacaa4f6e6cf151d
   UMCCommonLog: bea707e50c85cef4b0eb47cc5c7226bb843245ca
   UMCommon: ab4d875ddefe1b06c60b577e4a58bc4d433ee067
   UMDevice: c13bbb2e8ca6c67d1e23e03162553e3ec5a8b5b0
+  UMLink: d5047e2716c2571d120d890af0f7a41d1b5e5224
   UMShare: 84edf6d080f524d109271164ba2b07650f69d691
 
 PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d

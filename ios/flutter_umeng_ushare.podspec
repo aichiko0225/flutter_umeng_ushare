@@ -23,14 +23,17 @@ Pod::Spec.new do |s|
   s.dependency 'UMDevice'
   s.dependency 'UMCCommonLog'
 
+  # 友盟超链（深度链接）U-Link集成
+  s.dependency 'UMLink'
+
   # U-Share SDK UI模块（分享面板，建议添加）
   s.dependency 'UMShare/UI'
 
   #集成微信(完整版14.4M)
-  # s.dependency 'UMShare/Social/WeChat'
+  s.dependency 'UMShare/Social/WeChat'
   
   #集成QQ/QZone/TIM(完整版7.6M)
-  # s.dependency 'UMShare/Social/QQ'
+  s.dependency 'UMShare/Social/QQ'
   
   #集成新浪微博(完整版25.3M)
   # s.dependency 'UMShare/Social/Sina'
@@ -39,7 +42,7 @@ Pod::Spec.new do |s|
   # s.dependency 'UMShare/Social/ReducedSina'
   
   #集成钉钉
-  # s.dependency 'UMShare/Social/DingDing'
+  s.dependency 'UMShare/Social/DingDing'
   
   #企业微信
   # s.dependency 'UMShare/Social/WeChatWork'

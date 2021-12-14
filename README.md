@@ -119,7 +119,7 @@ public class WXEntryActivity extends WXCallbackActivity {
 defaultConfig {
     ....
 
-    manifestPlaceholders = [qqappid: "1106280000"]
+    manifestPlaceholders = [qqappid: "1112081613"]
 }
 ```
 

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.ArrayMap;
 
 import com.umeng.commonsdk.UMConfigure;
@@ -35,7 +37,56 @@ import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
 
 
-/** FlutterUmengUsharePlugin */
+class MainThreadResult implements Result {
+
+    private Result result;
+    private Handler handler;
+
+    MainThreadResult(MethodChannel.Result result) {
+        this.result = result;
+        handler = new Handler(Looper.getMainLooper());
+    }
+
+    @Override
+    public void success(final Object t_result) {
+        handler.post(
+                new Runnable() {
+
+                    @Override
+                    public void run() {
+                        result.success(t_result);
+                    }
+                });
+    }
+
+    @Override
+    public void error(
+            final String errorCode, final String errorMessage, final Object errorDetails) {
+        handler.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        result.error(errorCode, errorMessage, errorDetails);
+                    }
+                });
+    }
+
+    @Override
+    public void notImplemented() {
+        handler.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        result.notImplemented();
+                    }
+                });
+    }
+}
+
+
+/**
+ * FlutterUmengUsharePlugin
+ */
 public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandler, ActivityResultListener, RequestPermissionsResultListener {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
@@ -43,11 +94,14 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
     /// when the Flutter Engine is detached from the Activity
     private MethodChannel channel;
 
+    private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
+
     //android package name;
     private static String applicationId = "";
     private Context applicationContext;
 
-    public FlutterUmengUsharePlugin() { }
+    public FlutterUmengUsharePlugin() {
+    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -181,7 +235,7 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
                 break;
             case WXWORK:
                 // 企业微信设置
-                PlatformConfig.setWXWork("wwac6ffb259ff6f66a","EU1LRsWC5uWn6KUuYOiWUpkoH45eOA0yH-ngL8579zs","1000002","wwauthac6ffb259ff6f66a000002");
+                PlatformConfig.setWXWork("wwac6ffb259ff6f66a", "EU1LRsWC5uWn6KUuYOiWUpkoH45eOA0yH-ngL8579zs", "1000002", "wwauthac6ffb259ff6f66a000002");
                 PlatformConfig.setWXWorkFileProvider(applicationId + ".fileprovider");
                 break;
             case DINGTALK:
@@ -190,7 +244,7 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
                 break;
             case SINA:
                 // 新浪微博设置
-                PlatformConfig.setSinaWeibo("3921700954","04b48b094faeb16683c32669824ebdad","http://sns.whalecloud.com");
+                PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
                 PlatformConfig.setSinaFileProvider(applicationId + ".fileprovider");
                 break;
             case ALIPAY:
@@ -266,12 +320,15 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
     }
 
     private void shareText(SHARE_MEDIA platform, String text, final Result result) {
+        MainThreadResult mainThreadResult = new MainThreadResult(result);
+
         new ShareAction(getTopActivity()).setPlatform(platform)
                 .withText(text)
-                .setCallback(new UmengShareActionListener(getTopActivity(), result)).share();
+                .setCallback(new UmengShareActionListener(getTopActivity(), mainThreadResult)).share();
     }
 
     private void shareImage(SHARE_MEDIA platform, String thumb, String image, final Result result) {
+        MainThreadResult mainThreadResult = new MainThreadResult(result);
 
         final Activity activity = getTopActivity();
         UMImage thumbImage = new UMImage(activity, thumb);
@@ -280,11 +337,11 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
         new ShareAction(activity)
                 .setPlatform(platform)
                 .withMedia(sImage)
-                .setCallback(new UmengShareActionListener(activity, result)).share();
+                .setCallback(new UmengShareActionListener(activity, mainThreadResult)).share();
     }
 
     private void shareMedia(SHARE_MEDIA platform, int sharetype, String title, String desc, String thumb, String link, final Result result) {
-
+        MainThreadResult mainThreadResult = new MainThreadResult(result);
         Activity activity = getTopActivity();
         if (sharetype == 0) {
             UMImage thumbImage = new UMImage(activity, thumb);
@@ -294,7 +351,7 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
             music.setDescription(desc);//描述
             new ShareAction(activity).setPlatform(platform)
                     .withMedia(music)
-                    .setCallback(new UmengShareActionListener(activity, result)).share();
+                    .setCallback(new UmengShareActionListener(activity, mainThreadResult)).share();
         } else if (sharetype == 1) {
             UMImage thumbImage = new UMImage(activity, thumb);
             UMVideo video = new UMVideo(link);
@@ -303,7 +360,7 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
             video.setDescription(desc);//描述
             new ShareAction(activity).setPlatform(platform)
                     .withMedia(video)
-                    .setCallback(new UmengShareActionListener(activity, result)).share();
+                    .setCallback(new UmengShareActionListener(activity, mainThreadResult)).share();
         } else if (sharetype == 2) {
             System.out.println("share web url");
             UMImage thumbImage = new UMImage(activity, thumb);
@@ -314,12 +371,12 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
 
             new ShareAction(activity).setPlatform(platform)
                     .withMedia(web)
-                    .setCallback(new UmengShareActionListener(activity, result)).share();
+                    .setCallback(new UmengShareActionListener(activity, mainThreadResult)).share();
         } else {
             Map<String, Object> map = new HashMap<>();
             map.put("um_status", "ERROR");
             map.put("um_msg", "INVALID TYPE");
-            result.success(map);
+            mainThreadResult.success(map);
         }
     }
 
@@ -338,36 +395,38 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
     }
 
     private void login(SHARE_MEDIA platform, final Result result) {
-
+        MainThreadResult mainThreadResult = new MainThreadResult(result);
         Activity activity = getTopActivity();
-        UMShareAPI.get(activity).getPlatformInfo(activity, platform, new UMAuthListener() {
-            @Override
-            public void onStart(SHARE_MEDIA share_media) {
+        if (activity != null) {
+            UMShareAPI.get(activity).getPlatformInfo(activity, platform, new UMAuthListener() {
+                @Override
+                public void onStart(SHARE_MEDIA share_media) {
 
-            }
+                }
 
-            @Override
-            public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                map.put("um_status", "SUCCESS");
-                result.success(map);
+                @Override
+                public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+                    map.put("um_status", "SUCCESS");
+                    mainThreadResult.success(map);
 
-            }
+                }
 
-            @Override
-            public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("um_status", "ERROR");
-                map.put("um_msg", throwable.getMessage());
-                result.success(map);
-            }
+                @Override
+                public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("um_status", "ERROR");
+                    map.put("um_msg", throwable.getMessage());
+                    mainThreadResult.success(map);
+                }
 
-            @Override
-            public void onCancel(SHARE_MEDIA share_media, int i) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("um_status", "CANCEL");
-                result.success(map);
-            }
-        });
+                @Override
+                public void onCancel(SHARE_MEDIA share_media, int i) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("um_status", "CANCEL");
+                    mainThreadResult.success(map);
+                }
+            });
+        }
     }
 
     @Override

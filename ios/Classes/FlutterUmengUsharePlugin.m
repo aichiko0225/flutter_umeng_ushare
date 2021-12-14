@@ -20,12 +20,11 @@
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     if ([@"getPlatformVersion" isEqualToString:call.method]) {
       result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-    } else {
-    result(FlutterMethodNotImplemented);
     }
 
     if ([@"initUMConfigure" isEqualToString:call.method]) {
-        NSString *appkey = call.arguments[@"appkey"];
+        NSDictionary *dic = call.arguments[@"appkey"];
+        NSString *appkey = dic[@"iosKey"];
         NSString *applicationId = call.arguments[@"applicationId"];
         [self initUMConfigure:appkey withApplicationId:applicationId];
     }

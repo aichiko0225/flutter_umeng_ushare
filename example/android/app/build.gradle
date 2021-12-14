@@ -40,7 +40,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
-        manifestPlaceholders = [qqappid: "1106280000"]
+        manifestPlaceholders = [qqappid: "1112081613"]
     }
 
     buildTypes {
@@ -49,6 +49,10 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
     }
 }
 

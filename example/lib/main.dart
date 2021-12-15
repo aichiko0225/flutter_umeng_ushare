@@ -38,8 +38,8 @@ class _MyAppState extends State<MyApp> {
       platformVersion = 'Failed to get platform version.';
     }
 
-    UMengShare.initUMConfigure(const UMApiKey(iosKey: '61b83443e014255fcbb29434', androidKey: '61b83403e014255fcbb29404'), 'com.example.flutterUmengUshareExample');
-    UMengShare.setPlatform(UMPlatform.QQ, appId: '1112081613', appSecret: '4nbEGzAjsz0b9ioL', universalLink:'https://cc.umeng.com');
+    UMengShare.initUMConfigure(const UMApiKey(iosKey: '61b83443e014255fcbb29434', androidKey: '61b83403e014255fcbb29404'), 'com.example.umengUshareExample');
+    UMengShare.setPlatform(UMPlatform.QQ, appId: '1112081613', appSecret: '4nbEGzAjsz0b9ioL', universalLink:'https://bhb6sl.jgmlink.cn/qq_conn/1112081613');
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
@@ -64,14 +64,16 @@ class _MyAppState extends State<MyApp> {
               Text('Running on: $_platformVersion\n'),
               ElevatedButton(onPressed: (){
                 _loginForQQ();
-              }, child: Text('QQ 登录'))
+              }, child: const Text('QQ 登录')),
+              ElevatedButton(onPressed: (){
+                _loginForDingDing();
+              }, child: const Text('钉钉 登录'))
             ],
           ) 
         ),
       ),
     );
   }
-
 
   _loginForQQ() async {
     try {
@@ -85,7 +87,7 @@ class _MyAppState extends State<MyApp> {
           debugPrint('用户取消');
           break;
         case 'SUCCESS':
-
+          debugPrint(resut.toString());
           break;
         default:
         break;
@@ -93,5 +95,9 @@ class _MyAppState extends State<MyApp> {
     } catch (error) {
       debugPrint(error.toString());
     }
+  }
+
+  _loginForDingDing() async {
+    debugPrint('钉钉暂不支持第三方登录');
   }
 }

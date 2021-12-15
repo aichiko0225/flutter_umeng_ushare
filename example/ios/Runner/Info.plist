@@ -41,7 +41,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>Umeng_Ushare</string>
+				<string>UmengUshare</string>
 			</array>
 		</dict>
 	</array>
@@ -52,6 +52,14 @@
 		<string>wechat</string>
 		<string>weixin</string>
 		<string>weixinULAPI</string>
+        <string>mqqgamebindinggroup</string>
+        <string>mqqopensdkapiV2</string>
+        <string>mqqopensdkavatar</string>
+        <string>mqqopensdkfriend</string>
+        <string>tencentapi.qq.reqContent</string>
+        <string>tencentapi.qzone.reqContent</string>
+        <string>mqqthirdappgroup</string>
+        <string>mqqopensdkminiapp</string>
 		<string>mqqopensdklaunchminiapp</string>
 		<string>mqqopensdkminiapp</string>
 		<string>mqqapi</string>
@@ -135,6 +143,13 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>App需要您的同意,才能访问相册</string>
 	<key>UILaunchStoryboardName</key>

@@ -19,7 +19,7 @@
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     if ([@"getPlatformVersion" isEqualToString:call.method]) {
-      result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+        result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
     }
 
     if ([@"initUMConfigure" isEqualToString:call.method]) {
@@ -27,14 +27,17 @@
         NSString *appkey = dic[@"iosKey"];
         NSString *applicationId = call.arguments[@"applicationId"];
         [self initUMConfigure:appkey withApplicationId:applicationId];
+        result(@YES);
+        return;
     }
     
     if ([@"setPlatform" isEqualToString:call.method]) {
-        int platformType = ((NSNumber*)call.arguments[@"platform"]).intValue;
+        int platformType = ((NSNumber *)call.arguments[@"platform"]).intValue;
         NSString *appId = call.arguments[@"appId"];
         NSString *appSecret = call.arguments[@"appSecret"];
         NSString *universalLink = call.arguments[@"universalLink"];
         [self setPlatform:[self getPlatform:platformType] appId:appId appSecret:appSecret universalLink:universalLink];
+        result(@YES);
         return;
     }
     
@@ -98,15 +101,17 @@
         case UMSocialPlatformType_WechatSession:
             //配置微信平台的Universal Links
             [UMSocialGlobal shareInstance].universalLinkDic = @{@(UMSocialPlatformType_WechatSession):universalLink};
-            [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:appId appSecret:appSecret redirectURL:nil];
+            [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:appId appSecret:appSecret redirectURL:@"http://mobile.umeng.com/social"];
             break;
         case UMSocialPlatformType_QQ:
             //配置qq的Universal Links
-            [UMSocialGlobal shareInstance].universalLinkDic = @{@(UMSocialPlatformType_QQ):universalLink};
-            [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:appId appSecret:appSecret redirectURL:nil];
+            [UMSocialGlobal shareInstance].universalLinkDic = @{
+                @(UMSocialPlatformType_QQ): universalLink
+            };
+            [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:appId appSecret:appSecret redirectURL:@"http://mobile.umeng.com/social"];
             break;
         case UMSocialPlatformType_Sina:
-            [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:appId  appSecret:appSecret redirectURL:@"https://sns.whalecloud.com/sina2/callback"];
+            [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:appId appSecret:appSecret redirectURL:@"https://sns.whalecloud.com/sina2/callback"];
             break;
         default:
             break;
@@ -198,7 +203,6 @@
 }
 
 //分享图片
-
 - (void)shareImage:(UMSocialPlatformType)platformType
          withImage:(NSString *)image
          withThumb:(NSString *)thumb
@@ -306,32 +310,30 @@
 
 //登录
 -(void)login:(UMSocialPlatformType)platformType result:(FlutterResult)result {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[UMSocialManager defaultManager] getUserInfoWithPlatform:platformType currentViewController:nil completion:^(id data, NSError *error) {
-            if (error) {
-                if(error.code == 2009){
-                    //error.code;
-                    result( @{@"um_status": @"CANCEL"});
-                }else{
-                    result(@{@"um_status": @"ERROR", @"um_msg": error.userInfo});
-                }
-            } else {
-                UMSocialUserInfoResponse *resp = data;
-                NSDictionary *ret = @{
-                    @"um_status": @"SUCCESS",
-                    @"uid": resp.uid,
-                    @"openid": resp.openid,
-                    @"accessToken": resp.accessToken,
-                    @"expiration": resp.expiration,
-                    @"name": resp.name,
-                    @"iconurl": resp.iconurl,
-                    @"gender": resp.gender,
-                    @"originalResponse": resp.originalResponse
-                };
-                result(ret);
+    [[UMSocialManager defaultManager] getUserInfoWithPlatform:platformType currentViewController:nil completion:^(id data, NSError *error) {
+        if (error) {
+            if(error.code == 2009){
+                //error.code;
+                result( @{@"um_status": @"CANCEL"} );
+            }else{
+                result(@{@"um_status": @"ERROR", @"um_msg": error.userInfo});
             }
-        }];
-    });
+        } else {
+            UMSocialUserInfoResponse *resp = data;
+            NSDictionary *ret = @{
+                @"um_status": @"SUCCESS",
+                @"uid": resp.uid,
+                @"openid": resp.openid,
+                @"accessToken": resp.accessToken,
+//                @"expiration": resp.expiration,
+                @"name": resp.name,
+                @"iconurl": resp.iconurl,
+                @"gender": resp.gender,
+                @"originalResponse": resp.originalResponse
+            };
+            result(ret);
+        }
+    }];
 }
 
 //检察应用是否安装

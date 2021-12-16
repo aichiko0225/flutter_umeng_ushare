@@ -35,8 +35,6 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-
-        manifestPlaceholders = [qqappid: "1112081613"]
     }
 
     lintOptions {

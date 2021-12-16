@@ -311,6 +311,9 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
             case 4:
                 result = SHARE_MEDIA.TWITTER;
                 break;
+            case 5:
+                result = SHARE_MEDIA.DINGTALK;
+                break;
             default:
                 result = SHARE_MEDIA.SINA;
                 break;

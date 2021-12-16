@@ -171,6 +171,9 @@
         case 4:
             type = UMSocialPlatformType_Twitter;//Twitter
             break;
+        case 5:
+            type = UMSocialPlatformType_DingDing;//Twitter
+            break;
         default:
             type = UMSocialPlatformType_Sina;
             break;

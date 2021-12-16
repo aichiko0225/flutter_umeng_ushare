@@ -40,7 +40,7 @@ enum UMSharePlatform {
 ///Facebook 脸书
 ///
 ///Twitter 推特
-enum UMPlatform { Sina, Wechat, QQ, Facebook, Twitter }
+enum UMPlatform { Sina, Wechat, QQ, Facebook, Twitter, DingDing }
 
 ///分享类型
 ///

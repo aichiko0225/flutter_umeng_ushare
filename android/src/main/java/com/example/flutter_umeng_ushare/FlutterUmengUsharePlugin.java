@@ -440,6 +440,6 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
 
     @Override
     public boolean onRequestPermissionsResult(int i, String[] strings, int[] ints) {
-        return true;
+        return false;
     }
 }

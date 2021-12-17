@@ -127,6 +127,7 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
             String appkey = appkey_map.get("androidKey");
             String applicationId = call.argument("applicationId");
             initUMConfigure(appkey, applicationId);
+            result.success(true);
             return;
         }
 
@@ -135,6 +136,7 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
             String appId = call.argument("appId");
             String appSecret = call.argument("appSecret");
             initPlatformConfig(getPlatForm(platform), appId, appSecret);
+            result.success(true);
             return;
         }
 

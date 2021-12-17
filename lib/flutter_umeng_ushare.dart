@@ -19,7 +19,7 @@ class UMengShare {
     UMApiKey appkey,
     String applicationId,
   ) async {
-    Map<String, dynamic> result = await _channel.invokeMethod(
+    bool result = await _channel.invokeMethod(
       'initUMConfigure',
       {
         "appkey": appkey.toMap(),
@@ -45,7 +45,7 @@ class UMengShare {
     if (redirectURL != null) {
       dic['redirectURL'] = redirectURL;
     }
-    Map<dynamic, dynamic> result = await _channel.invokeMethod(
+    bool result = await _channel.invokeMethod(
       'setPlatform', dic,
     );
     return result;

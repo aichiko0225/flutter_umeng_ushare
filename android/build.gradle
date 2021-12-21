@@ -1,4 +1,4 @@
-group 'com.example.flutter_umeng_ushare'
+group 'com.umeng.flutter_umeng_ushare'
 version '1.0'
 
 buildscript {
@@ -27,6 +27,11 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 30
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -35,18 +40,38 @@ android {
 
     defaultConfig {
         minSdkVersion 16
+        ndk { //PushSDK目前只支持4种架构
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86'
+        }
+        manifestPlaceholders = [qqappid: "11111111111111111111"]
     }
-
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
     lintOptions {
         checkReleaseBuilds false
     }
 }
 
 dependencies {
+//    implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    
+
     api 'com.umeng.umsdk:common:9.3.8'
     api 'com.umeng.umsdk:asms:1.2.2'
+
+//    api 'com.umeng.umsdk:common:9.4.4'
+//    api 'com.umeng.umsdk:asms:1.4.1'
+//    api files('libs/umeng-common-9.4.4.jar')
+//    api files('libs/umeng-asms-armeabi-v1.4.1.aar')
+//    api files('libs/umeng-abtest-v1.0.0.aar')
+//    implementation(name:'umeng-asms-armeabi-v1.4.1', ext:'aar')
+
+//    api 'com.umeng.umsdk:common:9.3.8'
+//    api 'com.umeng.umsdk:asms:1.2.2'
+
 
     implementation  'com.umeng.umsdk:share-core:7.1.7'//分享核心库，必选
     implementation  'com.umeng.umsdk:share-board:7.1.7'//分享面板功能，可选
@@ -56,6 +81,7 @@ dependencies {
 
     implementation 'com.umeng.umsdk:share-qq:7.1.7'//QQ完整版
     implementation files('libs/open_sdk_3.5.8.3_re272d81_lite.jar') //QQ官方依赖库，必选
+
     implementation 'com.squareup.okhttp3:okhttp:3.14.9'//QQ官方sdk 3.53及之后版本需要集成okhttp3.x，必选
 
     implementation 'com.umeng.umsdk:share-sina:7.1.7'//新浪微博完整版

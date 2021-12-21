@@ -1,4 +1,4 @@
-package com.example.flutter_umeng_ushare_example;
+package com.umeng.soexample;
 
 import io.flutter.embedding.android.FlutterActivity;
 

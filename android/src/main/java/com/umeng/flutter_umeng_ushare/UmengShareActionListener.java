@@ -1,4 +1,4 @@
-package com.example.flutter_umeng_ushare;
+package com.umeng.flutter_umeng_ushare;
 
 import android.app.Activity;
 import com.umeng.socialize.UMShareListener;

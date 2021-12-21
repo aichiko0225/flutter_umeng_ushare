@@ -1,4 +1,4 @@
-package com.example.flutter_umeng_ushare;
+package com.umeng.flutter_umeng_ushare;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.ArrayMap;
+import android.widget.Toast;
 
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
@@ -19,6 +20,7 @@ import com.umeng.socialize.media.UMMin;
 import com.umeng.socialize.media.UMVideo;
 import com.umeng.socialize.media.UMWeb;
 import com.umeng.socialize.media.UMusic;
+import com.umeng.socialize.utils.SocializeUtils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -172,6 +174,10 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
             int platform = call.argument("platform");
             boolean flag = UMShareAPI.get(applicationContext).isInstall(getTopActivity(), getPlatForm(platform));
             result.success(flag);
+        } else if (call.method.equals("deleteOauth")) {
+            int platform = call.argument("platform");
+            deleteOauth(getPlatForm(platform), result);
+
         } else {
             result.notImplemented();
         }
@@ -433,6 +439,43 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
             });
         }
     }
+
+    private void deleteOauth(SHARE_MEDIA platform, final Result result) {
+        MainThreadResult mainThreadResult = new MainThreadResult(result);
+        Activity activity = getTopActivity();
+        if (activity != null) {
+            UMShareAPI.get(activity).deleteOauth(activity, platform, new UMAuthListener() {
+                @Override
+                public void onStart(SHARE_MEDIA share_media) {
+
+                }
+
+                @Override
+                public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("um_status", "SUCCESS");
+                    mainThreadResult.success(data);
+
+                }
+
+                @Override
+                public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("um_status", "ERROR");
+                    map.put("um_msg", throwable.getMessage());
+                    mainThreadResult.success(map);
+                }
+
+                @Override
+                public void onCancel(SHARE_MEDIA share_media, int i) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("um_status", "CANCEL");
+                    mainThreadResult.success(map);
+                }
+            });
+        }
+    }
+
 
     @Override
     public boolean onActivityResult(int i, int i1, Intent intent) {

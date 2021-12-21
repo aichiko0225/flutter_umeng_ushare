@@ -159,6 +159,18 @@ class UMengShare {
     return result;
   }
 
+  /// 取消授权
+  ///
+  /// @platform 需要deleteOauth的平台
+  ///
+  /// 返回参数说明 um_status : SUCCESS 成功 ERROR 失败 CANCEL 用户取消
+  /// 如果成功 用户信息会包含在该返回对象中
+  static Future<dynamic> deleteOauth(UMPlatform platform) async {
+    Map<dynamic, dynamic>  result =
+    await _channel.invokeMethod('deleteOauth', {"platform": platform.index});
+    return result;
+  }
+
   /// 检测是否安装应用
   ///
   /// @platform 需要检测的平台

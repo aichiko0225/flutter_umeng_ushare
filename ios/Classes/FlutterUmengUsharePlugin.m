@@ -30,7 +30,7 @@
         result(@YES);
         return;
     }
-    
+
     if ([@"setPlatform" isEqualToString:call.method]) {
         int platformType = ((NSNumber *)call.arguments[@"platform"]).intValue;
         NSString *appId = call.arguments[@"appId"];
@@ -40,7 +40,7 @@
         result(@YES);
         return;
     }
-    
+
     if ([@"shareText" isEqualToString:call.method]) {
             int platformType=((NSNumber*)call.arguments[@"platform"]).intValue;
             NSString *text=call.arguments[@"text"];
@@ -64,7 +64,7 @@
         } else if([@"login" isEqualToString:call.method]) {
             int platformType=((NSNumber*)call.arguments[@"platform"]).intValue;
             [self login:[self getPlatform:platformType] result:result];
-        } else if([@"login" isEqualToString:call.method]) {
+        } else if([@"shareMiniApp" isEqualToString:call.method]) {
             NSString *username=call.arguments[@"username"];
             NSString *thumb=call.arguments[@"thumb"];
             NSString *title=call.arguments[@"title"];
@@ -153,7 +153,7 @@
 }
 
 - (UMSocialPlatformType)getPlatform:(int)platformType {
-    
+
     UMSocialPlatformType type = UMSocialPlatformType_Sina;
     switch (platformType) {
         case 0:
@@ -189,7 +189,7 @@
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //设置文本
     messageObject.text = text;
-    
+
     dispatch_async(dispatch_get_main_queue(), ^ {
         [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:nil completion:^(id data, NSError *error) {
             if (error) {
@@ -215,7 +215,7 @@
     //创建图片内容对象
     UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
     //shareObject.t
-    
+
     //如果有缩略图，则设置缩略图本地
     //shareObject.thumbImage = thumb;
     [shareObject setThumbImage:thumb];
@@ -293,7 +293,7 @@
     //shareObject.hdImageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"logo" ofType:@"png"]];
     shareObject.miniProgramType = UShareWXMiniProgramTypeRelease;
     messageObject.shareObject = shareObject;
-    
+
     //调用分享接口
     dispatch_async(dispatch_get_main_queue(), ^{
         [[UMSocialManager defaultManager] shareToPlatform:UMSocialPlatformType_WechatSession messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {

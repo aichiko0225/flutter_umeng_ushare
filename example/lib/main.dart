@@ -96,8 +96,8 @@ class _MyAppState extends State<MyApp> {
             androidKey: '59892f08310c9307b60023d0'),
         'com.umeng.soexample');
     UMengShare.setPlatform(UMPlatform.QQ,
-        appId: '1112081613',
-        appSecret: '4nbEGzAjsz0b9ioL',
+        appId: '101830139',
+        appSecret: '5d63ae8858f1caab67715ccd6c18d7a5',
         universalLink: 'https://bhb6sl.jgmlink.cn/qq_conn/1112081613');
     UMengShare.setPlatform(UMPlatform.Wechat,
         appId: 'wxdc1e388c3822c80b',
@@ -117,7 +117,7 @@ class _MyAppState extends State<MyApp> {
           debugPrint('用户取消');
           break;
         case 'SUCCESS':
-          debugPrint(resut.toString());
+          debugPrint("wjj"+resut.toString());
           break;
         default:
           break;

@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.util.ArrayMap;
 import android.widget.Toast;
 
+import com.tencent.tauth.Tencent;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.ShareAction;
@@ -62,8 +63,7 @@ class MainThreadResult implements Result {
     }
 
     @Override
-    public void error(
-            final String errorCode, final String errorMessage, final Object errorDetails) {
+    public void error(final String errorCode, final String errorMessage, final Object errorDetails) {
         handler.post(
                 new Runnable() {
                     @Override
@@ -177,7 +177,6 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
         } else if (call.method.equals("deleteOauth")) {
             int platform = call.argument("platform");
             deleteOauth(getPlatForm(platform), result);
-
         } else {
             result.notImplemented();
         }
@@ -240,6 +239,8 @@ public class FlutterUmengUsharePlugin implements FlutterPlugin, MethodCallHandle
                 //QQ设置
                 PlatformConfig.setQQZone(appId, appSecret);
                 PlatformConfig.setQQFileProvider(applicationId + ".fileprovider");
+                //QQ官方sdk授权
+                Tencent.setIsPermissionGranted(true);
                 break;
             case WXWORK:
                 // 企业微信设置
